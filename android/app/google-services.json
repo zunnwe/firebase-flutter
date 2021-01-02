@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "153742890102",
+    "project_id": "comics-store",
+    "storage_bucket": "comics-store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153742890102:android:8d5223a1d6a08e97fb3b57",
+        "android_client_info": {
+          "package_name": "com.example.comics_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153742890102-s58pd06lhgbbac1tgokab77t6k3du0qt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.comics_app",
+            "certificate_hash": "e11b8461b49218eba86faabc864285a3ef7c538e"
+          }
+        },
+        {
+          "client_id": "153742890102-3e0u5lk8mhu4ac7c49kso6lhumn3c7qf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMcRLXJUZDOGTBLj4yugWLcZOB0fFOLyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153742890102-3e0u5lk8mhu4ac7c49kso6lhumn3c7qf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
