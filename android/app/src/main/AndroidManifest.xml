@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.comics_app">
-   <application
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
         android:label="comics_app"
         android:icon="@mipmap/ic_launcher">
         <activity
