@@ -55,7 +55,7 @@ List<Parts> _convertParts(List partMap) {
 }
 var uuid = Uuid();
 Map<String, dynamic> _PdfToJson(Pdfs instance) => <String, dynamic> {
-      'id': instance.id == null ? null : uuid.v1(),
+      'id': instance.id == null ? null : uuid.v4(),
       'fiction_name': instance.fiction_name,
       'image': instance.image,
       //'pdf_path': instance.pdf_path,

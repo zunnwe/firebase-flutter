@@ -9,17 +9,18 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'models/parts.dart';
-import 'models/pdfs.dart';
+import '../models/parts.dart';
+import '../models/pdfs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart';
+import 'package:comics_app/models/user.dart';
+
 
 typedef DialogCallback = void Function();
 
 class PdfDetails extends StatelessWidget {
-  final Pdfs pdf;
-
-  const PdfDetails(this.pdf);
+  final UserData pdf;
+  final uid;
+  const PdfDetails(this.uid, this.pdf);
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +34,17 @@ class PdfDetails extends StatelessWidget {
                 Navigator.pop(context);
               }),
         ),
-        body: PdfDetailForm(pdf),
+        body: PdfDetailForm(uid, pdf),
       ),
     );
   }
 }
 
 class PdfDetailForm extends StatefulWidget {
-  final Pdfs pdfs;
+  final UserData pdfs;
+  final uid;
 
-  const PdfDetailForm(this.pdfs);
+  const PdfDetailForm(this.uid, this.pdfs);
 
   @override
   _PdfDetailFormState createState() => _PdfDetailFormState();
@@ -297,7 +299,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
   }
 
 
-  void _addParts(Pdfs pdfs, DialogCallback callback) {
+  void _addParts(UserData pdfs, DialogCallback callback) {
     String parts;
     //DateTime vaDate;
     String part_name;
