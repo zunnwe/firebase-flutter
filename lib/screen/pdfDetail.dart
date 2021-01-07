@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comics_app/repository/dataRepository.dart';
+import 'package:comics_app/screen/partList.dart';
 import 'package:comics_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:uuid/uuid.dart';
 import '../models/parts.dart';
 import '../models/pdfs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -205,6 +207,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                         "Parts",
                         style: TextStyle(fontSize: 16.0),
                       ),
+
                       ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 200),
                         child: ListView.builder(
@@ -214,6 +217,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                               ? 0
                               : widget.pdfs.parts.length,
                           itemBuilder: (BuildContext context, int index) {
+                            print(index);
                             return buildRow(widget.pdfs.parts[index]);
                           },
                         ),
@@ -254,8 +258,8 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                       if (_formKey.currentState.validate()) {
                         if (_formKey.currentState.validate()) {
                           Navigator.of(context).pop();
-                          widget.pdfs.fiction_name?? '';
-                          widget.pdfs.image?? '';
+                          widget.pdfs.fiction_name = story_name?? widget.pdfs.fiction_name;
+                          widget.pdfs.image = image?? widget.pdfs.image;
                           //widget.pdfs.pdf_path?? '';
 
                           repository.updatePdf(widget.pdfs);
@@ -278,9 +282,20 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
   Widget buildRow(Parts parts) {
     return Row(
       children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Text(parts.name),
+        // Expanded(
+        //   flex: 1,
+        //   child: Text(parts.name),
+        // ),
+        GestureDetector(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context)=> PartListScreen(parts.name))
+            );
+          },
+          child: Container(
+            child: Text( parts.name)
+          ),
         ),
         // Container(
         //   flex: 1,
@@ -300,10 +315,9 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
 
 
   void _addParts(UserData pdfs, DialogCallback callback) {
-    String parts;
-    //DateTime vaDate;
     String part_name;
     // String part_url;
+    final uuid = Uuid();
     File file;
     Timestamp created_at = Timestamp.now();
     Timestamp updated_at = Timestamp.now();
@@ -351,7 +365,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         Navigator.of(context).pop();
-                        Parts newPart = Parts(name: part_name, pdf_url: pdf_url,
+                        Parts newPart = Parts(uuid.v1(), name: part_name, pdf_url: pdf_url,
                             createdAt: created_at, updatedAt: updated_at);
                         if (pdfs.parts == null) {
                           pdfs.parts = List<Parts>();

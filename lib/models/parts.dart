@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Parts {
-  //String parts;
+  String part_id;
   String name;
   String pdf_url;
   //File pdf_file;
@@ -10,7 +10,7 @@ class Parts {
   Timestamp updatedAt;
   DocumentReference reference;
 
-  Parts({this.name, this.pdf_url, this.reference, this.createdAt, this.updatedAt});
+  Parts(this.part_id, {this.name, this.pdf_url, this.reference, this.createdAt, this.updatedAt});
 
 
   factory Parts.fromJson(Map<dynamic, dynamic> json) => _PartFromJson(json);
@@ -24,7 +24,7 @@ class Parts {
 
 Parts _PartFromJson(Map<dynamic, dynamic> json) {
   return Parts(
-    //json['parts'] as String,
+    json['part_id'] as String,
     name: json['name'] as String,
     pdf_url: json['pdf_url'] as String,
     createdAt: json['created_at'] as Timestamp,
@@ -34,7 +34,7 @@ Parts _PartFromJson(Map<dynamic, dynamic> json) {
 
 Map<String, dynamic> _PartToJson(Parts instance) =>
     <String, dynamic> {
-      //'parts': instance.parts,
+      'part_id': instance.part_id,
       'name': instance.name,
       'pdf_url': instance.pdf_url,
       'created_at': instance.createdAt,

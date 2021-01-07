@@ -67,7 +67,7 @@ List<Parts> _convertParts(List partMap) {
 var uuid = Uuid();
 Map<String, dynamic> _UserDataToJson(UserData instance) => <String, dynamic> {
   'uid': instance.uid == null? null : uuid.v1(),
-  'id': instance.id == null ? null : uuid.v4(),
+  'id': instance.id == null ? null : uuid.v1(),
   'fiction_name': instance.fiction_name,
   'image': instance.image,
   //'pdf_path': instance.pdf_path,
