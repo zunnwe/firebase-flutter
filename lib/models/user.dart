@@ -9,8 +9,8 @@ import 'package:uuid/uuid.dart';
 class Users {
 
   final String uid;
-
-  Users({ this.uid });
+  final String username;
+  Users({ this.uid, this.username });
 }
 
 class UserData {
@@ -66,8 +66,8 @@ List<Parts> _convertParts(List partMap) {
 }
 var uuid = Uuid();
 Map<String, dynamic> _UserDataToJson(UserData instance) => <String, dynamic> {
-  'uid': instance.uid == null? null : uuid.v1(),
-  'id': instance.id == null ? null : uuid.v1(),
+  'uid': instance.uid,
+  'id': instance.id,
   'fiction_name': instance.fiction_name,
   'image': instance.image,
   //'pdf_path': instance.pdf_path,

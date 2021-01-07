@@ -71,7 +71,7 @@ class _PdfListScreenState extends State<PdfListScreen> {
                     child: Text("Cancel")),
                 FlatButton(
                     onPressed: () {
-                      UserData newPdf = UserData(uid, fiction_name: dialogWidget.fiction_name, image: dialogWidget.image_url, createdAt: dialogWidget.createdAt, updatedAt: dialogWidget.updatedAt);
+                      UserData newPdf = UserData(uid, fiction_name: dialogWidget.fiction_name,id: uuid.v1(), image: dialogWidget.image_url, createdAt: dialogWidget.createdAt, updatedAt: dialogWidget.updatedAt);
                       repository.addPdf(newPdf);
                       Navigator.of(context).pop();
                     },
@@ -94,11 +94,13 @@ class _PdfListScreenState extends State<PdfListScreen> {
     }
 
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: InkWell(
+          borderRadius: BorderRadius.circular(5),
           child: Row(
             children: <Widget>[
               Expanded(child: Text(pdf.fiction_name == null ? "" : pdf.fiction_name, style: BoldStyle)),
+
               // _getPetIcon(pdf.type)
             ],
           ),

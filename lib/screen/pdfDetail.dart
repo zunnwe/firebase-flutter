@@ -146,7 +146,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
       child: FormBuilder(
         key: _formKey,
         //autovalidate: true,
@@ -212,13 +212,13 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                         constraints: BoxConstraints(maxHeight: 200),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          padding: EdgeInsets.all(16.0),
+                          padding: EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 10.0),
                           itemCount: widget.pdfs.parts == null
                               ? 0
                               : widget.pdfs.parts.length,
                           itemBuilder: (BuildContext context, int index) {
                             print(index);
-                            return buildRow(widget.pdfs.parts[index]);
+                            return buildRow(widget.pdfs.parts[index], index, widget.pdfs.parts);
                           },
                         ),
                       ),
@@ -259,7 +259,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                         if (_formKey.currentState.validate()) {
                           Navigator.of(context).pop();
                           widget.pdfs.fiction_name = story_name?? widget.pdfs.fiction_name;
-                          widget.pdfs.image = image?? widget.pdfs.image;
+                          widget.pdfs.image = widget.pdfs.image?? '';
                           //widget.pdfs.pdf_path?? '';
 
                           repository.updatePdf(widget.pdfs);
@@ -279,7 +279,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
     );
   }
 
-  Widget buildRow(Parts parts) {
+  Widget buildRow(Parts parts, int index, List<Parts> partList) {
     return Row(
       children: <Widget>[
         // Expanded(
@@ -288,13 +288,25 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
         // ),
         GestureDetector(
           onTap: (){
+            print(index);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context)=> PartListScreen(parts.name))
+              MaterialPageRoute(builder: (context)=> PartListScreen(parts.name, index, partList))
             );
           },
           child: Container(
-            child: Text( parts.name)
+            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+            height: 30,
+            width: 250,
+            decoration: BoxDecoration(
+                color: Colors.grey,
+              borderRadius: BorderRadius.circular(2),
+              border: Border.all(
+                width: 2,
+                color: Colors.white70
+              )
+            ),
+            child: Text( parts.name, style: TextStyle(fontSize: 20),)
           ),
         ),
         // Container(
