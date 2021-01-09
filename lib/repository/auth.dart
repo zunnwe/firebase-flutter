@@ -16,6 +16,7 @@ class AuthService{
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: pwd);
       User user = result.user;
+      await FirebaseAuth.instance.currentUser.updateProfile(displayName:user.displayName);
       return user;
     }
     catch(e){
@@ -28,6 +29,7 @@ class AuthService{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: pwd);
       User user = result.user;
+      await FirebaseAuth.instance.currentUser.updateProfile(displayName:user.displayName);
       return user;
     }
     catch(e){

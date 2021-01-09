@@ -12,6 +12,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:comics_app/utils/userData_notifier.dart';
 
 class PdfListScreen extends StatefulWidget {
   @override
@@ -24,12 +25,22 @@ class _PdfListScreenState extends State<PdfListScreen> {
   final DataRepository repository = DataRepository();
   final uuid = Uuid();
   Users user;
+  UserData pdfs;
   @override
   Widget build(BuildContext context) {
+    DataRepository repo = new DataRepository();
+    UserDataNotifier notifier = Provider.of<UserDataNotifier>(context, listen: false);
+    repo.getusersData(notifier);
+    Future<void> _refreshList() async {
+      pdfs = repo.getusersData(notifier);
+    }
     return _buildHome(context);
   }
 
   Widget _buildHome(BuildContext context) {
+
+    //.where((data) => repo.userDataList.contains(data)
+
     user = Provider.of<Users>(context);
     return Scaffold(
       appBar: AppBar(

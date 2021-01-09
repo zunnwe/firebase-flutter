@@ -109,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('Michelle James',
+                            child: Text('something',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20.0,

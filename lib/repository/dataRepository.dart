@@ -3,29 +3,25 @@ import 'package:comics_app/models/parts.dart';
 import 'package:comics_app/models/pdfs.dart';
 import 'package:comics_app/models/reading-list.dart';
 import 'package:comics_app/models/user.dart';
+import 'package:comics_app/utils/userData_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'dart:collection';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class DataRepository with ChangeNotifier{
+class DataRepository{
   final CollectionReference collection = Firestore.instance.collection('pdfs');
   final CollectionReference readingList = Firestore.instance.collection('reading-list');
   var firebaseUser = FirebaseAuth.instance.currentUser;
 
-  List<UserData> _userData = [];
+  //List<UserData> _userData = [];
 
-  UnmodifiableListView<UserData> get userDataList => UnmodifiableListView(_userData);
+  //UnmodifiableListView<UserData> get userDataList => UnmodifiableListView(_userData);
 
-  set userDataList(List<UserData> userDataList) {
-    _userData = userDataList;
-    notifyListeners();
-  }
-
-  get userData async{
+  getusersData(UserDataNotifier notifier) async{
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('pdfs')
-        .get();
+        .getDocuments();
 
     List<UserData> _userDataList = [];
 
@@ -33,27 +29,36 @@ class DataRepository with ChangeNotifier{
       UserData pdf = UserData.fromJson(document.data());
       _userDataList.add(pdf);
     });
-    userDataList = _userDataList;
+    notifier.userDataList = _userDataList;
+    print('userDtalist');
+    print(_userDataList);
   }
+
 
   Stream<QuerySnapshot> getStream() {
     return collection.snapshots();
+    // UserDataNotifier notifier = new UserDataNotifier();
+    // return getusersData(notifier);
   }
   
   Future<DocumentReference> addPdf(UserData pdfs) {
-    _userData.add(pdfs);
+    //_userData.add(pdfs);
     return collection.add(pdfs.toJson());
   }
 
   updatePdf(UserData pdfs) async {
+    // String id;
+    // var doc = await collection.getDocuments();
+    // doc.documents.forEach((element) {
+    //   id = element.id;
+    // });
       await collection.document(pdfs.reference.documentID).updateData(pdfs.toJson());
-      notifyListeners();
+
   }
 
   deletePdf(UserData pdfs) async{
-    _userData.clear();
     await collection.document(pdfs.reference.documentID).delete();
-    notifyListeners();
+
   }
 
   Stream<QuerySnapshot> getReadingList(){
@@ -69,22 +74,21 @@ class DataRepository with ChangeNotifier{
 
     }
     else{
-      print(parts);
+      // print(parts);
       List<Parts> partList = List<Parts>();
-      parts.forEach((element) {
-        partList.remove(index);
-        _userData.remove(index);
-      });
-      print(partList);
+      partList = parts;
+      partList.removeAt(index);
+      //partList = parts;
+      // print("partList");
+      // print(partList);
       return partList;
     }
   }
 
-  updatePart(UserData userData, List<Parts> parts) async{
-    await collection.document(userData.reference.documentID).update({'parts': parts});
-    notifyListeners();
-
-  }
+  // updatePart(UserData userData, List<Parts> parts) async{
+  //   await collection.document(userData.reference.documentID).update({'parts': parts});
+  //
+  // }
 
   // getPart() {
   //   List<Parts> parts;

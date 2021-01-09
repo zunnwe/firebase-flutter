@@ -15,17 +15,24 @@ import '../models/parts.dart';
 import '../models/pdfs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:comics_app/models/user.dart';
-
+import 'package:provider/provider.dart';
+import 'package:comics_app/utils/userData_notifier.dart';
 
 typedef DialogCallback = void Function();
 
 class PdfDetails extends StatelessWidget {
-  final UserData pdf;
+  UserData pdf;
   final uid;
-  const PdfDetails(this.uid, this.pdf);
+  PdfDetails(this.uid, this.pdf);
 
   @override
   Widget build(BuildContext context) {
+    DataRepository repo = new DataRepository();
+    UserDataNotifier notifier = Provider.of<UserDataNotifier>(context,listen: false);
+    repo.getusersData(notifier);
+    Future<void> _refreshList() async {
+      pdf = repo.getusersData(notifier);
+    }
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -217,8 +224,8 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                               ? 0
                               : widget.pdfs.parts.length,
                           itemBuilder: (BuildContext context, int index) {
-                            print(index);
-                            return buildRow(widget.pdfs.parts[index], index, widget.pdfs.parts);
+
+                            return buildRow(widget.pdfs.parts[index], index, widget.pdfs.parts, widget.pdfs);
                           },
                         ),
                       ),
@@ -279,7 +286,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
     );
   }
 
-  Widget buildRow(Parts parts, int index, List<Parts> partList) {
+  Widget buildRow(Parts parts, int index, List<Parts> partList, UserData pdfs) {
     return Row(
       children: <Widget>[
         // Expanded(
@@ -291,7 +298,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
             print(index);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context)=> PartListScreen(parts.name, index, partList))
+              MaterialPageRoute(builder: (context)=> PartListScreen(pdfs, parts.name, index, partList))
             );
           },
           child: Container(

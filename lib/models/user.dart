@@ -9,13 +9,13 @@ import 'package:uuid/uuid.dart';
 class Users {
 
   final String uid;
-  final String username;
-  Users({ this.uid, this.username });
+  final String displayName;
+  Users({ this.uid, this.displayName });
 }
 
 class UserData {
 
-  final String uid;
+  String uid;
   String fiction_name;
   String id;
   String image;
@@ -26,6 +26,7 @@ class UserData {
   DocumentReference reference;
 
   UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference});
+
 
   factory UserData.fromSnapshot(DocumentSnapshot snapshot) {
     UserData newUserData = UserData.fromJson(snapshot.data());
@@ -86,5 +87,9 @@ List<Map<String, dynamic>> _PartList(List<Parts> parts) {
   });
   return partMap;
 }
+
+
+
+
 
 
