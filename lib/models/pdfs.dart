@@ -13,6 +13,12 @@ class Pdfs {
   List<Parts> parts = List<Parts>();
   Timestamp createdAt;
   Timestamp updatedAt;
+  String profile_pic;
+  String username;
+  int view_count;
+  int rating;
+  bool completed;
+  List<String> genre=[];
   DocumentReference reference;
 
   Pdfs(this.id, {this.fiction_name, this.image, this.createdAt, this.updatedAt, this.reference, this.parts});

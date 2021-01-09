@@ -32,7 +32,7 @@ class _WrapperState extends State<Wrapper>{
     
     // return either the Home or Authenticate widget
     if (user == null){
-      return LoginScreen();
+      return RegistrationScreen();
     } else {
       return PdfListScreen();
       // return MaterialApp(

@@ -23,6 +23,12 @@ class UserData {
   List<Parts> parts = List<Parts>();
   Timestamp createdAt;
   Timestamp updatedAt;
+  String profile_pic;
+  String username;
+  int view_count;
+  int rating;
+  bool completed;
+  List<String> genre=[];
   DocumentReference reference;
 
   UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference});
