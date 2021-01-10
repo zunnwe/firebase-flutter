@@ -5,12 +5,13 @@ class Parts {
   String part_id;
   String name;
   String pdf_url;
+  bool publish;
   //File pdf_file;
   Timestamp createdAt;
   Timestamp updatedAt;
   DocumentReference reference;
 
-  Parts(this.part_id, {this.name, this.pdf_url, this.reference, this.createdAt, this.updatedAt});
+  Parts(this.part_id, {this.name, this.pdf_url, this.reference, this.createdAt, this.updatedAt, this.publish});
 
 
   factory Parts.fromJson(Map<dynamic, dynamic> json) => _PartFromJson(json);
@@ -27,6 +28,7 @@ Parts _PartFromJson(Map<dynamic, dynamic> json) {
     json['part_id'] as String,
     name: json['name'] as String,
     pdf_url: json['pdf_url'] as String,
+    publish: json['publish'] as bool,
     createdAt: json['created_at'] as Timestamp,
     updatedAt: json['updated_at'] as Timestamp
   );
@@ -37,6 +39,7 @@ Map<String, dynamic> _PartToJson(Parts instance) =>
       'part_id': instance.part_id,
       'name': instance.name,
       'pdf_url': instance.pdf_url,
+      'publish': instance.publish,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt
     };

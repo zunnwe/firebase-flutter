@@ -41,7 +41,7 @@ class _PartListState extends State<PartListScreen>{
   Widget build(BuildContext context) {
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context);
-    repo.getusersData(notifier);
+    //repo.getusersData(notifier);
     // var pdfs;
     //  _refreshList()  {
     //     repo.getusersData(notifier).toList();

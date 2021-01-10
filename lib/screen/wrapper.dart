@@ -1,5 +1,6 @@
 import 'package:comics_app/repository/dataRepository.dart';
 import 'package:comics_app/screen/errorScreen.dart';
+import 'package:comics_app/screen/home.dart';
 import 'package:comics_app/screen/pdfListScreen.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:comics_app/screen/login.dart';
@@ -21,7 +22,7 @@ class _WrapperState extends State<Wrapper>{
     // TODO: implement initState
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context, listen: false);
-    repo.getusersData(notifier);
+    //repo.getusersData(notifier);
     super.initState();
   }
 
@@ -29,12 +30,12 @@ class _WrapperState extends State<Wrapper>{
   Widget build(BuildContext context) {
 
     final user = Provider.of<Users>(context);
-    
+
     // return either the Home or Authenticate widget
     if (user == null){
       return RegistrationScreen();
     } else {
-      return PdfListScreen();
+      return HomeScreen();
       // return MaterialApp(
       //   title: 'comics app',
       //   theme: ThemeData(
@@ -58,7 +59,7 @@ class _WrapperState extends State<Wrapper>{
       // );
 
     }
-    
+
   }
 }
 

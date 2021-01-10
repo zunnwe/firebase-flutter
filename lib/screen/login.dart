@@ -1,11 +1,15 @@
 import 'package:comics_app/repository/auth.dart';
+import 'package:comics_app/screen/home.dart';
+import 'package:comics_app/screen/registration.dart';
 import 'package:comics_app/screen/verify.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:comics_app/utils/constants.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/screen/pdfListScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:comics_app/utils/auth_notifier.dart';
 //
 // class LoginScreen extends StatelessWidget{
 //
@@ -149,9 +153,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
   final auth = FirebaseAuth.instance;
+  AuthService _authService = new AuthService();
+  Users _user = Users();
 
+  // void initState() {
+  //   AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+  //   _authService.initializeCurrentUser(authNotifier);
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
+    //AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(title: Text('SignIn'),),
       body: Column(
@@ -165,6 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onChanged: (value) {
                 setState(() {
+                 // _user.email = value.trim();
                   _email = value.trim();
                 });
               },
@@ -177,6 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(hintText: 'Password'),
               onChanged: (value) {
                 setState(() {
+                  //_user.password = value.trim();
                   _password = value.trim();
                 });
               },
@@ -190,18 +204,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Theme.of(context).accentColor,
                     child: Text('Signin'),
                     onPressed: (){
+                      // _authService.login(_email, _password).then((curUser){
+                      //   User currentUser = curUser;
+                      //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen(curUser)));
+                      // });
                       auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PdfListScreen()));
+                        _user.email = _email;
+                        _user.password = _password;
+                        _user.displayName = FirebaseAuth.instance.currentUser.displayName;
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
                       });
-
                     }),
                 RaisedButton(
                   color: Theme.of(context).accentColor,
                   child: Text('Signup'),
                   onPressed: (){
-                    auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen()));
-                    });
+                    //auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RegistrationScreen()));
+//                    });
 
                   },
                 ),

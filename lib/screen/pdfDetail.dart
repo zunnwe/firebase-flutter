@@ -29,9 +29,9 @@ class PdfDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context,listen: false);
-    repo.getusersData(notifier);
+    //repo.getusersData(notifier);
     Future<void> _refreshList() async {
-      pdf = repo.getusersData(notifier);
+      //pdf = repo.getusersData(notifier);
     }
     return SafeArea(
       child: Scaffold(

@@ -30,9 +30,9 @@ class _PdfListScreenState extends State<PdfListScreen> {
   Widget build(BuildContext context) {
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context, listen: false);
-    repo.getusersData(notifier);
+    //repo.getusersData(notifier);
     Future<void> _refreshList() async {
-      pdfs = repo.getusersData(notifier);
+      //pdfs = repo.getusersData(notifier);
     }
     return _buildHome(context);
   }

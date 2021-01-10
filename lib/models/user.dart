@@ -8,9 +8,11 @@ import 'package:uuid/uuid.dart';
 
 class Users {
 
-  final String uid;
-  final String displayName;
-  Users({ this.uid, this.displayName });
+  String uid;
+  String displayName;
+  String email;
+  String password;
+  Users({ this.uid, this.displayName,this.password, this.email });
 }
 
 class UserData {

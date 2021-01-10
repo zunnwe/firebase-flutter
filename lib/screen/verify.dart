@@ -1,10 +1,15 @@
 import 'dart:async';
 
-import 'package:comics_app/screen/pdfListScreen.dart';
+import 'package:comics_app/screen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:comics_app/utils/auth_notifier.dart';
+import 'package:comics_app/models/user.dart';
 
 class VerifyScreen extends StatefulWidget {
+
+  String _displayName;
+  VerifyScreen(this._displayName);
   @override
   _VerifyScreenState createState() => _VerifyScreenState();
 }
@@ -13,15 +18,16 @@ class _VerifyScreenState extends State<VerifyScreen> {
   final auth = FirebaseAuth.instance;
   User user;
   Timer timer;
+  String _displayName;
 
   @override
   void initState() {
     user = auth.currentUser;
     user.sendEmailVerification();
-
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
       checkEmailVerified();
     });
+    _displayName = widget._displayName;
     super.initState();
   }
 
@@ -41,13 +47,18 @@ class _VerifyScreenState extends State<VerifyScreen> {
     );
   }
 
+  //AuthNotifier authNotifier = new AuthNotifier();
   Future<void> checkEmailVerified() async {
     user = auth.currentUser;
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => PdfListScreen()));
+      //authNotifier.setUser(currentUser);
+      //print(currentUser.displayName);
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => HomeScreen()));
+        user.updateProfile(
+            displayName: _displayName);
     }
   }
 }

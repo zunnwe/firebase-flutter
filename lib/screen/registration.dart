@@ -7,6 +7,7 @@ import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/screen/pdfListScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:comics_app/utils/auth_notifier.dart';
 //
 // class RegistrationScreen extends StatelessWidget{
 //   final AuthService _authService = AuthService();
@@ -166,11 +167,20 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<RegistrationScreen> {
-  String _email, _password;
+  String _email, _password, _displayName;
   final auth = FirebaseAuth.instance;
+  Users user = new Users();
+  AuthService _authService = new AuthService();
+
+  // void initState() {
+  //   AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+  //   _authService.initializeCurrentUser(authNotifier);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    //AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(title: Text('SignUp'),),
       body: Column(
@@ -184,7 +194,8 @@ class _LoginScreenState extends State<RegistrationScreen> {
               ),
               onChanged: (value) {
                 setState(() {
-                  _email = value.trim();
+                  //user.displayName = value.trim();
+                  _displayName = value.trim();
                 });
               },
             ),
@@ -198,6 +209,7 @@ class _LoginScreenState extends State<RegistrationScreen> {
               ),
               onChanged: (value) {
                 setState(() {
+                  //user.email = value.trim();
                   _email = value.trim();
                 });
               },
@@ -210,6 +222,7 @@ class _LoginScreenState extends State<RegistrationScreen> {
               decoration: InputDecoration(hintText: 'Password'),
               onChanged: (value) {
                 setState(() {
+                  //user.password = value.trim();
                   _password = value.trim();
                 });
               },
@@ -225,7 +238,7 @@ class _LoginScreenState extends State<RegistrationScreen> {
               ),
               onChanged: (value) {
                 setState(() {
-                  _email = value.trim();
+                  _password = value.trim();
                 });
               },
             ),
@@ -237,10 +250,13 @@ class _LoginScreenState extends State<RegistrationScreen> {
                   color: Theme.of(context).accentColor,
                   child: Text('Signup'),
                   onPressed: (){
+                    // _authService.signup(_email, _password, _displayName).then((curUser){
+                    //   Users currentUser = curUser;
+                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen(currentUser)));
+                    // });
                     auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen(_displayName)));
                     });
-
                   },
                 ),
                 RaisedButton(

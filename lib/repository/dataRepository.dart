@@ -13,6 +13,8 @@ class DataRepository{
   final CollectionReference collection = Firestore.instance.collection('pdfs');
   final CollectionReference readingList = Firestore.instance.collection('reading-list');
   var firebaseUser = FirebaseAuth.instance.currentUser;
+  final String uid;
+  DataRepository({this.uid});
 
   //List<UserData> _userData = [];
 
@@ -24,13 +26,12 @@ class DataRepository{
         .getDocuments();
 
     List<UserData> _userDataList = [];
-
     snapshot.documents.forEach((document) {
       UserData pdf = UserData.fromJson(document.data());
       _userDataList.add(pdf);
     });
     notifier.userDataList = _userDataList;
-    print('userDtalist');
+    print('userdataliast');
     print(_userDataList);
   }
 
@@ -40,6 +41,20 @@ class DataRepository{
     // UserDataNotifier notifier = new UserDataNotifier();
     // return getusersData(notifier);
   }
+
+  // getusersData(UserDataNotifier notifier) async{
+  //   print("uid");
+  //   print(uid);
+  //   List<UserData> _userDataList = [];
+  //   await collection.document().snapshots()
+  //       .map((snapshot){
+  //         UserData pdf = UserData.fromJson(snapshot.data());
+  //         _userDataList.add(pdf);
+  //       });
+  //   notifier.userDataList = _userDataList;
+  //   print("userrdatalist");
+  //   print(_userDataList);
+  // }
   
   Future<DocumentReference> addPdf(UserData pdfs) {
     //_userData.add(pdfs);
@@ -90,22 +105,5 @@ class DataRepository{
   //
   // }
 
-  // getPart() {
-  //   List<Parts> parts;
-  //     String part_id;
-  //     final ref = Firestore.instance.collection('pdfs').doc('id').get().then((value) =>
-  //     {
-  //       parts = Pdfs.fromSnapshot(value).parts,
-  //       parts.forEach((element) {
-  //         part_id = element.part_id;
-  //       })
-  //     }
-  //     );
-  //     return part_id;
-  //   }
-  //     final ref = Firestore.instance.collection('pdfs').doc().get().then((value) => {
-  //       parts = Pdfs.fromSnapshot(value).parts
-  //     });
-  //     return parts;
-  // }
+
 }
