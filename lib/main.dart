@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:comics_app/utils/auth_notifier.dart';
+//import 'package:comics_app/utils/auth_notifier.dart';
 import 'package:comics_app/screen/home.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:comics_app/repository/auth.dart';

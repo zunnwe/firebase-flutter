@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:comics_app/screen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:comics_app/utils/auth_notifier.dart';
+//import 'package:comics_app/utils/auth_notifier.dart';
 import 'package:comics_app/models/user.dart';
 
 class VerifyScreen extends StatefulWidget {

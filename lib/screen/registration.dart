@@ -7,7 +7,7 @@ import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/screen/pdfListScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:comics_app/utils/auth_notifier.dart';
+//import 'package:comics_app/utils/auth_notifier.dart';
 //
 // class RegistrationScreen extends StatelessWidget{
 //   final AuthService _authService = AuthService();

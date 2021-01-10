@@ -1,6 +1,6 @@
 import 'package:comics_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:comics_app/utils/auth_notifier.dart';
+//import 'package:comics_app/utils/auth_notifier.dart';
 import 'package:comics_app/screen/verify.dart';
 class AuthService {
 
@@ -107,12 +107,12 @@ class AuthService {
   //   authNotifier.setUser(null);
   // }
 
-  initializeCurrentUser(AuthNotifier authNotifier) async {
-    User firebaseUser = await FirebaseAuth.instance.currentUser;
-
-    if (firebaseUser != null) {
-      print(firebaseUser);
-      authNotifier.setUser(firebaseUser);
-    }
-  }
+  // initializeCurrentUser(AuthNotifier authNotifier) async {
+  //   User firebaseUser = await FirebaseAuth.instance.currentUser;
+  //
+  //   if (firebaseUser != null) {
+  //     print(firebaseUser);
+  //     authNotifier.setUser(firebaseUser);
+  //   }
+  // }
 }
