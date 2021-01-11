@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          user != null? displayName: "Story App",
+          "Story App",
         ),
         actions: <Widget> [
               Row(

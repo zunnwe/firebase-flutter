@@ -13,6 +13,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/utils/userData_notifier.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class PdfListScreen extends StatefulWidget {
   @override
@@ -100,7 +104,6 @@ class _PdfListScreenState extends State<PdfListScreen> {
     if (pdf == null) {
       return Container();
     }
-
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: InkWell(
@@ -108,7 +111,14 @@ class _PdfListScreenState extends State<PdfListScreen> {
           child: Row(
             children: <Widget>[
               Expanded(child: Text(pdf.fiction_name == null ? "" : pdf.fiction_name, style: BoldStyle)),
-
+              Expanded(
+                  child: ClipOval(
+                    child: CachedNetworkImage(imageUrl: pdf.image,
+                      width: 80.0,
+                      height: 80.0,
+                    ),
+                  )
+              )
               // _getPetIcon(pdf.type)
             ],
           ),
