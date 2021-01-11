@@ -5,10 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:comics_app/utils/auth_notifier.dart';
 import 'package:comics_app/models/user.dart';
+import 'dart:io';
 
 class VerifyScreen extends StatefulWidget {
 
   String _displayName;
+  //File _imageFile;
   VerifyScreen(this._displayName);
   @override
   _VerifyScreenState createState() => _VerifyScreenState();
@@ -55,10 +57,20 @@ class _VerifyScreenState extends State<VerifyScreen> {
       timer.cancel();
       //authNotifier.setUser(currentUser);
       //print(currentUser.displayName);
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomeScreen()));
-        user.updateProfile(
-            displayName: _displayName);
+      user.updateProfile(
+          displayName: _displayName);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen(_displayName)));
     }
   }
+
+  // Future UpdatePic(File imageFile) async{
+  //
+  //   FirebaseStorage storage = FirebaseStorage.instance;
+  //   Reference ref = storage.ref().child("profile_pic" + DateTime.now().toString());
+  //   UploadTask uploadTask = ref.putFile(_imageFile);
+  //   photoUrl = await (await uploadTask).ref.getDownloadURL();
+  //   print('photourl:');
+  //   print(photoUrl);
+  // }
 }

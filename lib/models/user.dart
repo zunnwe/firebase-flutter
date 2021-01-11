@@ -12,7 +12,8 @@ class Users {
   String displayName;
   String email;
   String password;
-  Users({ this.uid, this.displayName,this.password, this.email });
+  String profile_pic;
+  Users({ this.uid, this.displayName,this.password, this.email, this.profile_pic});
 }
 
 class UserData {
@@ -30,7 +31,7 @@ class UserData {
   int view_count;
   int vote_count;
   bool completed;
-  List<String> genre=[];
+  List<dynamic> genre= List<String>();
   DocumentReference reference;
 
   UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference, this.profile_pic, this.username, this.view_count, this.vote_count, this.completed, this.genre});

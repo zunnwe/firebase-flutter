@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
   final auth = FirebaseAuth.instance;
   AuthService _authService = new AuthService();
-  Users _user = Users();
+  //Users _user = Users();
 
   // void initState() {
   //   AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onChanged: (value) {
                 setState(() {
-                 // _user.email = value.trim();
+                  // _user.email = value.trim();
                   _email = value.trim();
                 });
               },
@@ -209,10 +209,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen(curUser)));
                       // });
                       auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
-                        _user.email = _email;
-                        _user.password = _password;
-                        _user.displayName = FirebaseAuth.instance.currentUser.displayName;
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+                        // _user.email = _email;
+                        // _user.password = _password;
+                        // _user.displayName = FirebaseAuth.instance.currentUser.displayName;
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen(auth.currentUser.displayName)));
                       });
                     }),
                 RaisedButton(
@@ -220,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text('Signup'),
                   onPressed: (){
                     //auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RegistrationScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RegistrationScreen()));
 //                    });
 
                   },

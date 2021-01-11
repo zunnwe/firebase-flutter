@@ -1,13 +1,98 @@
-import 'package:comics_app/repository/auth.dart';
-import 'package:comics_app/screen/login.dart';
+// import 'package:comics_app/repository/auth.dart';
+// import 'package:comics_app/screen/login.dart';
+// import 'package:comics_app/screen/verify.dart';
+// import 'package:flutter/material.dart';
+//
+// import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:comics_app/screen/home.dart';
 import 'package:comics_app/screen/verify.dart';
 import 'package:flutter/material.dart';
-import 'package:comics_app/utils/constants.dart';
-import 'package:comics_app/models/user.dart';
-import 'package:provider/provider.dart';
-import 'package:comics_app/screen/pdfListScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:comics_app/utils/auth_notifier.dart';
+import 'package:comics_app/screen/login.dart';
+
+class RegistrationScreen extends StatefulWidget {
+  @override
+  _RegistrationScreenState createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  String _email, _password, _displayName;
+  final auth = FirebaseAuth.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Signup'),),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'Username'
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _displayName = value.trim();
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'Email'
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _email = value.trim();
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(hintText: 'Password'),
+              onChanged: (value) {
+                setState(() {
+                  _password = value.trim();
+                });
+              },
+            ),
+
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:[
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text('Signup'),
+                  onPressed: (){
+                    auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen(_displayName)));
+                    });
+
+                  },
+                ),
+                RaisedButton(
+                    color: Theme.of(context).accentColor,
+                    child: Text('Signin'),
+                    onPressed: (){
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
+                    }),
+              ])
+        ],),
+    );
+  }
+}
+
 //
 // class RegistrationScreen extends StatelessWidget{
 //   final AuthService _authService = AuthService();
@@ -161,115 +246,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 // }
 
 
-class RegistrationScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
 
-class _LoginScreenState extends State<RegistrationScreen> {
-  String _email, _password, _displayName;
-  final auth = FirebaseAuth.instance;
-  Users user = new Users();
-  AuthService _authService = new AuthService();
-
-  // void initState() {
-  //   AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-  //   _authService.initializeCurrentUser(authNotifier);
-  //   super.initState();
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    //AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(title: Text('SignUp'),),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  hintText: 'UserName'
-              ),
-              onChanged: (value) {
-                setState(() {
-                  //user.displayName = value.trim();
-                  _displayName = value.trim();
-                });
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  hintText: 'Email'
-              ),
-              onChanged: (value) {
-                setState(() {
-                  //user.email = value.trim();
-                  _email = value.trim();
-                });
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(hintText: 'Password'),
-              onChanged: (value) {
-                setState(() {
-                  //user.password = value.trim();
-                  _password = value.trim();
-                });
-              },
-            ),
-
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  hintText: 'Confirm Password'
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _password = value.trim();
-                });
-              },
-            ),
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children:[
-                RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text('Signup'),
-                  onPressed: (){
-                    // _authService.signup(_email, _password, _displayName).then((curUser){
-                    //   Users currentUser = curUser;
-                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen(currentUser)));
-                    // });
-                    auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyScreen(_displayName)));
-                    });
-                  },
-                ),
-                RaisedButton(
-                    color: Theme.of(context).accentColor,
-                    child: Text('Signin'),
-                    onPressed: (){
-                      //auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-                      }
-
-                    )
-              ])
-        ],),
-    );
-  }
-}
+// child: GestureDetector(
+// onTap: () async{
+// var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+// setState(() {
+// _imageFile = image;
+// print('Image Path $_imageFile');
+// });
+// },
+// child: CircleAvatar(
+// radius: 30.0,
+// backgroundColor: Colors.white,
+// child: (_imageFile != null)?
+// Container(
+// decoration: BoxDecoration(
+// shape: BoxShape.circle,
+// image: DecorationImage(
+// image: FileImage(_imageFile),
+// fit: BoxFit.fill
+// )
+// ),
+// ): Image.network(
+// (photoUrl == null)? 'https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png'
+// : photoUrl,
+// fit: BoxFit.fill,
+// )
+// ),
+// ),

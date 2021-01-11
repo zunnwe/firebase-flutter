@@ -31,9 +31,9 @@ class _PdfListScreenState extends State<PdfListScreen> {
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context, listen: false);
     //repo.getusersData(notifier);
-    Future<void> _refreshList() async {
-      //pdfs = repo.getusersData(notifier);
-    }
+    // Future<void> _refreshList() async {
+    //   //pdfs = repo.getusersData(notifier);
+    // }
     return _buildHome(context);
   }
 
@@ -43,9 +43,6 @@ class _PdfListScreenState extends State<PdfListScreen> {
 
     user = Provider.of<Users>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Pdfs"),
-      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: repository.getStream(),
           builder: (context, snapshot) {

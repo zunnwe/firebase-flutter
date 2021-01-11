@@ -9,67 +9,60 @@ import 'package:comics_app/repository/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+import 'package:comics_app/screen/pdfListScreen.dart';
+import 'package:comics_app/screen/searchStory.dart';
+import 'package:comics_app/screen/readingList.dart';
+import 'package:comics_app/screen/createStory.dart';
+import 'package:comics_app/screen/editStory.dart';
 
 class HomeScreen extends StatefulWidget{
 
-  // Users currentUser;
-  // HomeScreen(this.currentUser);
+  String displayName;
+  HomeScreen(this.displayName);
   @override
   _HomeScreenState createState()=> _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>{
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin{
 
   AuthService _authService = new AuthService();
   UserData pdfs;
   DataRepository repo;
   Users user;
   UserDataNotifier userDataNotifier;
+  String displayName;
   File urlImageApi;
+  TabController controller;
+  int _currentIndex = 0;
   @override
   void initState() {
-    //currentUser = widget.currentUser;
+    displayName = widget.displayName;
     // TODO: implement initState
-    // user = Provider.of<Users>(context);
-    // repo = new DataRepository(uid: user.uid);
-    // user.displayName = FirebaseAuth.instance.currentUser.displayName;
-    // userDataNotifier = Provider.of<UserDataNotifier>(context, listen: false);
-    // repo.getusersData(userDataNotifier);
     super.initState();
+    //controller = TabController(vsync: this, length: myTabs.length);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
     user = Provider.of<Users>(context);
     repo = new DataRepository(uid: user.uid);
     user.displayName = FirebaseAuth.instance.currentUser.displayName;
-    userDataNotifier = Provider.of<UserDataNotifier>(context, listen: false);
-    repo.getusersData(userDataNotifier);
-    // Future<void> _refreshList() async {
-    //   pdfs = repo.getusersData(notifier);
-    // }
-   Future<void> userdata = repo.getusersData(userDataNotifier);
-   print("userdata");
-   print(userdata);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          user != null? user.displayName: "Story App",
+          user != null? displayName: "Story App",
         ),
         actions: <Widget> [
-          FutureBuilder<String>(
-            future: userdata,
-            builder: (context, AsyncSnapshot<dynamic> snapshot){
-              pdfs = UserData.fromSnapshot(snapshot.data());
-              createFileOfImageUrl(pdfs).then((result){
-                setState(() {
-                  urlImageApi = result;
-                });
-              });
-              return Row(
+              Row(
                 children: <Widget>[
                   FlatButton(
                     onPressed: () => _authService.signOut(),
@@ -78,47 +71,99 @@ class _HomeScreenState extends State<HomeScreen>{
                       style: TextStyle(fontSize: 15, color: Colors.white),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Color(0xff476cfb),
-                      child: ClipOval(
-                        child: new SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: (pdfs.image!=null)?Image.file(
-                            urlImageApi,
-                            fit: BoxFit.fill,
-                          ):Image.network(
-                            "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
+                  CircleAvatar(
+                    radius: 20.0,
+                    backgroundColor: Colors.white,
+                    child: Image.network(
+                      (user.profile_pic == null)? 'https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png'
+                      : user.profile_pic,
+                      fit: BoxFit.fill,
                     ),
-                  ),
+                    )
                 ],
-              );
-            },
-          )
+              )
+          //   },
+          // )
           // action button
-
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          setState(() {
+            this._currentIndex = index;
+          }
+          );
+          navigateScreen(index);
+        }, // new
+        currentIndex: _currentIndex, // new
+        items: [
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 30, color: Colors.blue,),
+            title: Text(''),
+          ),
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.search, size: 30, color: Colors.blue,),
+            title: Text(''),
+          ),
+          new BottomNavigationBarItem(
+              icon: Icon(Icons.local_library, size: 30, color: Colors.blue,),
+              title: Text('')
+          ),
+          new BottomNavigationBarItem(
+              icon: Icon(Icons.create, size: 30, color: Colors.blue,),
+              title: Text('')
+          ),
+        ],
+      ),
+      body: PdfListScreen()
     );
   }
 
-  Future<File> createFileOfImageUrl(UserData pdfs) async {
-    final url = pdfs.image;
-    final filename = url.substring(url.lastIndexOf("/") + 1);
-    var request = await HttpClient().getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    return file;
+  Widget navigateScreen(int index){
+    if(index == 1){
+      Navigator.push(context,
+      MaterialPageRoute(builder: (context)=> SearchStoryScreen())
+      );
+    }
+    if(index == 2){
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context)=> ReadingListScreen())
+      );
+    }
+    if(index == 3){
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext bc){
+            return Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.post_add),
+                      title: new Text('Create a new story'),
+                      onTap: () => {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=> CreateStoryScreen())
+                        )
+                      }
+                  ),
+                  new ListTile(
+                    leading: new Icon(Icons.edit_outlined),
+                    title: new Text('Edit another story'),
+                    onTap: () => {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context)=> EditStoryScreen())
+                      )
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+      );
+    }
   }
 }
+
+
 

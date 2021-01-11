@@ -35,7 +35,7 @@ class _WrapperState extends State<Wrapper>{
     if (user == null){
       return RegistrationScreen();
     } else {
-      return HomeScreen();
+      return HomeScreen(user.displayName);
       // return MaterialApp(
       //   title: 'comics app',
       //   theme: ThemeData(
@@ -62,8 +62,3 @@ class _WrapperState extends State<Wrapper>{
 
   }
 }
-
-// if(userDataList != []) {
-// Navigator.of(context)
-//     .push(MaterialPageRoute(builder: (context) => PdfListScreen()));
-// }

@@ -18,7 +18,9 @@ class DataRepository{
 
   //List<UserData> _userData = [];
 
-  //UnmodifiableListView<UserData> get userDataList => UnmodifiableListView(_userData);
+  Stream<QuerySnapshot> getStream() {
+    return collection.snapshots();
+  }
 
   getusersData(UserDataNotifier notifier) async{
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -35,26 +37,6 @@ class DataRepository{
     print(_userDataList);
   }
 
-
-  Stream<QuerySnapshot> getStream() {
-    return collection.snapshots();
-    // UserDataNotifier notifier = new UserDataNotifier();
-    // return getusersData(notifier);
-  }
-
-  // getusersData(UserDataNotifier notifier) async{
-  //   print("uid");
-  //   print(uid);
-  //   List<UserData> _userDataList = [];
-  //   await collection.document().snapshots()
-  //       .map((snapshot){
-  //         UserData pdf = UserData.fromJson(snapshot.data());
-  //         _userDataList.add(pdf);
-  //       });
-  //   notifier.userDataList = _userDataList;
-  //   print("userrdatalist");
-  //   print(_userDataList);
-  // }
   
   Future<DocumentReference> addPdf(UserData pdfs) {
     //_userData.add(pdfs);
@@ -93,9 +75,6 @@ class DataRepository{
       List<Parts> partList = List<Parts>();
       partList = parts;
       partList.removeAt(index);
-      //partList = parts;
-      // print("partList");
-      // print(partList);
       return partList;
     }
   }
