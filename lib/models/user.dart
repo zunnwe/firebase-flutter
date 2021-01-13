@@ -5,6 +5,7 @@ import 'parts.dart';
 import 'package:comics_app/models/pdfs.dart';
 import 'package:comics_app/models/parts.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Users {
 
@@ -110,6 +111,35 @@ List<Map<String, dynamic>> _PartList(List<Parts> parts) {
   });
   return partMap;
 }
+
+UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+  return UserData(
+      snapshot.data()['uid'] as String,
+      fiction_name: snapshot.data()['fiction_name'] as String,
+      id: snapshot.data()['id'] as String,
+      image: snapshot.data()['image'] as String,
+      //pdf_path: json['pdf_path'] as String,
+      createdAt: snapshot.data()['created_at'] as Timestamp,
+      updatedAt: snapshot.data()['updated_at'] as Timestamp,
+      profile_pic: snapshot.data()['profile_pic'] as String,
+      view_count: snapshot.data()['view_count'] as int,
+      vote_count: snapshot.data()['vote_count'] as int,
+      completed: snapshot.data()['completed'] as bool,
+      genre: snapshot.data()['genre'] as List,
+      //parts: _convertParts(snapshot.data()['parts'] as List),
+      description: snapshot.data()['description'] as String
+  );
+}
+
+Stream<DocumentSnapshot> getuserDataList() async*{
+  //CollectionReference userDataCollection = Firestore.instance.collection('pdfs');
+  // yield* userDataCollection
+  //     .doc(uid).snapshots().map(_userDataFromSnapshot);
+  User user = await FirebaseAuth.instance.currentUser;
+  yield* FirebaseFirestore.instance.collection('pdfs').doc(user.uid).snapshots();
+}
+
+
 
 
 

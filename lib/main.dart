@@ -31,12 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // return StreamProvider<Users>.value(
-    //   value: AuthService().user,
-    //   child: MaterialApp(
-    //     home: Wrapper(),
-    //   ),
-    // );
+
       return MaterialApp(
         title: 'Story app',
         theme: ThemeData(
@@ -46,22 +41,6 @@ class MyApp extends StatelessWidget {
         home: Wrapper()
       );
 
-    // return MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(create: (BuildContext context) => DataRepository(),),
-    //     StreamProvider<Users>.value(value: AuthService().user),
-    //     Provider(create: (BuildContext context) => repo.usersData(),)
-    //   ],
-    //
-    //   child: MaterialApp(
-    //     title: 'Wax App',
-    //     theme: ThemeData(
-    //         primarySwatch: Colors.blue,
-    //         accentColor: Colors.blue
-    //     ),
-    //     home: Wrapper(),
-    //   ),
-    // );
   }
 
 }

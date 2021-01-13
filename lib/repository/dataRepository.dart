@@ -4,9 +4,6 @@ import 'package:comics_app/models/pdfs.dart';
 import 'package:comics_app/models/reading-list.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:comics_app/utils/userData_notifier.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'dart:collection';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DataRepository{
@@ -38,10 +35,11 @@ class DataRepository{
   }
 
   
-  Future<DocumentReference> addPdf(UserData pdfs) {
+  Future<DocumentReference> addPdf(UserData pdfs) async{
     //_userData.add(pdfs);
     return collection.add(pdfs.toJson());
   }
+
 
   updatePdf(UserData pdfs) async {
     // String id;
@@ -50,7 +48,6 @@ class DataRepository{
     //   id = element.id;
     // });
       await collection.document(pdfs.reference.documentID).updateData(pdfs.toJson());
-
   }
 
   deletePdf(UserData pdfs) async{
@@ -79,7 +76,7 @@ class DataRepository{
     }
   }
 
-  // updatePart(UserData userData, List<Parts> parts) async{
+// updatePart(UserData userData, List<Parts> parts) async{
   //   await collection.document(userData.reference.documentID).update({'parts': parts});
   //
   // }

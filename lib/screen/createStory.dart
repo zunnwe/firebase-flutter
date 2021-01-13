@@ -6,9 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:comics_app/screen/addPart.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:comics_app/repository/dataRepository.dart';
 
 class CreateStoryScreen extends StatefulWidget{
 

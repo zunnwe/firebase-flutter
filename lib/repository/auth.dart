@@ -14,6 +14,10 @@ class AuthService {
   Stream<Users> get user{
      return _auth.onAuthStateChanged.map(_userValidateFromFirebase);
   }
+
+  Future<String> getCurrentUID() async {
+    return (await _auth.currentUser).uid;
+  }
 //
 //   Future signInWithEmailAndPassword(String email, String pwd) async{
 //     try{
