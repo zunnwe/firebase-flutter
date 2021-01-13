@@ -16,12 +16,13 @@ class Pdfs {
   String profile_pic;
   String username;
   int view_count;
-  int rating;
+  int vote_count;
   bool completed;
   List<String> genre=[];
+  String description;
   DocumentReference reference;
 
-  Pdfs(this.id, {this.fiction_name, this.image, this.createdAt, this.updatedAt, this.reference, this.parts});
+  Pdfs(this.id, {this.fiction_name, this.image, this.createdAt, this.updatedAt, this.reference, this.parts, this.username, this.view_count, this.vote_count, this.profile_pic, this.genre, this.completed, this.description});
 
   factory Pdfs.fromSnapshot(DocumentSnapshot snapshot) {
     Pdfs newPdf = Pdfs.fromJson(snapshot.data());
@@ -45,7 +46,14 @@ Pdfs _PdfFromJson(Map<String, dynamic> json) {
     //pdf_path: json['pdf_path'] as String,
     createdAt: json['created_at'] as Timestamp,
     updatedAt: json['updated_at'] as Timestamp,
-    parts: _convertParts(json['parts'] as List)
+    parts: _convertParts(json['parts'] as List),
+    username: json['username'] as String,
+    profile_pic: json['profile_pic'] as String,
+    view_count: json['view_count'] as int,
+    vote_count: json['vote_count'] as int,
+    genre: json['genre'] as List,
+    completed: json['completed'] as bool,
+    description: json['descripton'] as String
   );
 }
 
@@ -68,7 +76,14 @@ Map<String, dynamic> _PdfToJson(Pdfs instance) => <String, dynamic> {
       //'pdf_path': instance.pdf_path,
       'parts': _PartList(instance.parts),
       'created_at': instance.createdAt,
-      'updated_at': instance.updatedAt
+      'updated_at': instance.updatedAt,
+      'username': instance.username,
+      'profile_pic': instance.profile_pic,
+      'view_count': instance.view_count,
+      'vote_count': instance.vote_count,
+      'genre': instance.genre,
+      'completed': instance.completed,
+      'description': instance.description
     };
 
 List<Map<String, dynamic>> _PartList(List<Parts> parts) {

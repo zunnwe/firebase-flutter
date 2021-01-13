@@ -32,9 +32,10 @@ class UserData {
   int vote_count;
   bool completed;
   List<dynamic> genre= List<String>();
+  String description;
   DocumentReference reference;
 
-  UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference, this.profile_pic, this.username, this.view_count, this.vote_count, this.completed, this.genre});
+  UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference, this.profile_pic, this.username, this.view_count, this.vote_count, this.completed, this.genre, this.description});
 
 
   factory UserData.fromSnapshot(DocumentSnapshot snapshot) {
@@ -65,7 +66,8 @@ UserData _UserDataFromJson(Map<String, dynamic> json) {
       vote_count: json['vote_count'] as int,
       completed: json['completed'] as bool,
       genre: json['genre'] as List,
-      parts: _convertParts(json['parts'] as List)
+      parts: _convertParts(json['parts'] as List),
+      description: json['description'] as String
   );
 }
 
@@ -94,7 +96,8 @@ Map<String, dynamic> _UserDataToJson(UserData instance) => <String, dynamic> {
   'vote_count': instance.vote_count,
   'completed': instance.completed,
   'genre': instance.genre,
-  'updated_at': instance.updatedAt
+  'updated_at': instance.updatedAt,
+  'description': instance.description
 };
 
 List<Map<String, dynamic>> _PartList(List<Parts> parts) {
