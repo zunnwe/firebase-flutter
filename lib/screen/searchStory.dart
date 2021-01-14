@@ -19,7 +19,7 @@ class _SearchStoryState extends State<SearchStoryScreen>{
   Widget build(BuildContext context) {
     user = Provider.of<Users>(context);
     // repo = new DataRepository(uid: user.uid);
-    user.displayName = FirebaseAuth.instance.currentUser.displayName;
+    //user.displayName = FirebaseAuth.instance.currentUser.displayName;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(

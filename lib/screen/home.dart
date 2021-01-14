@@ -14,6 +14,7 @@ import 'package:comics_app/screen/searchStory.dart';
 import 'package:comics_app/screen/readingList.dart';
 import 'package:comics_app/screen/createStory.dart';
 import 'package:comics_app/screen/editStory.dart';
+import 'package:comics_app/screen/profilepage.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -53,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
 
     user = Provider.of<Users>(context);
-    repo = new DataRepository(uid: user.uid);
-    user.displayName = FirebaseAuth.instance.currentUser.displayName;
+    repo = new DataRepository(uid: user.id);
+    //user.displayName = FirebaseAuth.instance.currentUser.displayName;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -71,15 +72,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       style: TextStyle(fontSize: 15, color: Colors.white),
                     ),
                   ),
-                  CircleAvatar(
-                    radius: 20.0,
-                    backgroundColor: Colors.white,
-                    child: Image.network(
-                      (user.profile_pic == null)? 'https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png'
-                      : user.profile_pic,
-                      fit: BoxFit.fill,
-                    ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=> ProfileView())
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 20.0,
+                      backgroundColor: Colors.white,
+                      child: Image.network(
+                        (user.photoUrl == null)? 'https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png'
+                            : user.photoUrl,
+                        fit: BoxFit.fill,
+                      ),
                     )
+                  ),
                 ],
               )
           //   },

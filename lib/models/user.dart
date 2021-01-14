@@ -8,14 +8,33 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Users {
+  final String id;
+  final String username;
+  final String email;
+  final String photoUrl;
+  final String displayName;
+  final String bio;
 
-  String uid;
-  String displayName;
-  String email;
-  String password;
-  String profile_pic;
-  Users({ this.uid, this.displayName,this.password, this.email, this.profile_pic});
+  Users(this.id, {
+    this.username,
+    this.email,
+    this.photoUrl,
+    this.displayName,
+    this.bio,
+  });
+
+  factory Users.fromDocument(DocumentSnapshot doc) {
+    return Users(
+      doc['id'] as String,
+      email: doc['email'] as String,
+      username: doc['username'] as String,
+      photoUrl: doc['photoUrl'] as String,
+      displayName: doc['displayName'] as String,
+      bio: doc['bio'] as String,
+    );
+  }
 }
+
 
 class UserData {
 
@@ -27,8 +46,6 @@ class UserData {
   List<Parts> parts = List<Parts>();
   Timestamp createdAt;
   Timestamp updatedAt;
-  String profile_pic;
-  String username;
   int view_count;
   int vote_count;
   bool completed;
@@ -36,7 +53,7 @@ class UserData {
   String description;
   DocumentReference reference;
 
-  UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference, this.profile_pic, this.username, this.view_count, this.vote_count, this.completed, this.genre, this.description});
+  UserData(this.uid, { this.fiction_name, this.id, this.image, this.parts, this.createdAt, this.updatedAt, this.reference, this.view_count, this.vote_count, this.completed, this.genre, this.description});
 
 
   factory UserData.fromSnapshot(DocumentSnapshot snapshot) {
@@ -62,7 +79,6 @@ UserData _UserDataFromJson(Map<String, dynamic> json) {
       //pdf_path: json['pdf_path'] as String,
       createdAt: json['created_at'] as Timestamp,
       updatedAt: json['updated_at'] as Timestamp,
-      profile_pic: json['profile_pic'] as String,
       view_count: json['view_count'] as int,
       vote_count: json['vote_count'] as int,
       completed: json['completed'] as bool,
@@ -91,8 +107,6 @@ Map<String, dynamic> _UserDataToJson(UserData instance) => <String, dynamic> {
   //'pdf_path': instance.pdf_path,
   'parts': _PartList(instance.parts),
   'created_at': instance.createdAt,
-  'profile_pic': instance.profile_pic,
-  'username': instance.username,
   'view_count': instance.view_count,
   'vote_count': instance.vote_count,
   'completed': instance.completed,
@@ -121,7 +135,6 @@ UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
       //pdf_path: json['pdf_path'] as String,
       createdAt: snapshot.data()['created_at'] as Timestamp,
       updatedAt: snapshot.data()['updated_at'] as Timestamp,
-      profile_pic: snapshot.data()['profile_pic'] as String,
       view_count: snapshot.data()['view_count'] as int,
       vote_count: snapshot.data()['vote_count'] as int,
       completed: snapshot.data()['completed'] as bool,

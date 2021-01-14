@@ -55,14 +55,6 @@ class DataRepository{
 
   }
 
-  Stream<QuerySnapshot> getReadingList(){
-    return readingList.snapshots();
-  }
-
-  Future<DocumentReference> addReadingList(ReadingList books){
-    return readingList.add(books.toJson());
-  }
-
   deletePart(int index, List parts){
     if(parts == null){
 

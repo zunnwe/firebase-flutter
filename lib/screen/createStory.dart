@@ -60,7 +60,7 @@ class _createStoryScreenState extends State<CreateStoryScreen>{
             //UserData data = UserData(user.uid, fiction_name: title, description: description, image: imageUrl);
            // DataRepository().addPdf(data);
             Navigator.push(context,
-            MaterialPageRoute( builder: (context)=> AddPartScreen(title, description, imageUrl, user.uid))
+            MaterialPageRoute( builder: (context)=> AddPartScreen(title, description, imageUrl, user.id))
             );
           }),
         ],

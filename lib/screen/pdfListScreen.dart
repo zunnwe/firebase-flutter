@@ -14,8 +14,7 @@ import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/utils/userData_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:comics_app/screen/viewStoryInfo.dart';
 
 
 class PdfListScreen extends StatefulWidget {
@@ -67,7 +66,7 @@ class _PdfListScreenState extends State<PdfListScreen> {
 
   void _addPdf(BuildContext context) {
     // Users user = Provider.of<Users>(context);
-    String uid = user.uid;
+    String uid = user.id;
     AlertDialogWidget dialogWidget = AlertDialogWidget();
     showDialog(
         context: context,
@@ -127,7 +126,7 @@ class _PdfListScreenState extends State<PdfListScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PdfDetails(user.uid, pdf),
+                    builder: (context) => ViewStoryInfo(user.id, pdf),
                   ));
             }
 

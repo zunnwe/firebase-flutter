@@ -1,270 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:comics_app/repository/auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class ProfilePage extends StatefulWidget {
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
+class ProfileView extends StatelessWidget {
 
-class _ProfilePageState extends State<ProfilePage> {
   File _image;
-
+  String imageUrl;
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Edit Profile")),
+      body: Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future: AuthService().getCurrentUser(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return displayUserInformation(context, snapshot);
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget displayUserInformation(context, snapshot) {
+    var user = snapshot.data;
     Future getImage() async {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
         _image = image;
-          print('Image Path $_image');
-      });
+        print('Image Path $_image');
+
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage.ref().child("partImg" + DateTime.now().toString());
+      UploadTask uploadTask = ref.putFile(_image);
+      imageUrl = await (await uploadTask).ref.getDownloadURL();
+      user.photoUrl = imageUrl;
     }
 
-    Future uploadPic(BuildContext context) async{
-      String fileName = basename(_image.path);
-       Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
-       UploadTask uploadTask = firebaseStorageRef.putFile(_image);
-       TaskSnapshot taskSnapshot=await uploadTask;
-       setState(() {
-          print("Profile Picture uploaded");
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-       });
-    }
-
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(FontAwesomeIcons.arrowLeft),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          title: Text('Edit Profile'),
-        ),
-        body: Builder(
-        builder: (context) =>  Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Color(0xff476cfb),
-                      child: ClipOval(
-                        child: new SizedBox(
-                          width: 180.0,
-                          height: 180.0,
-                          child: (_image!=null)?Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.network(
-                            "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 60.0),
-                    child: IconButton(
-                      icon: Icon(
-                        FontAwesomeIcons.camera,
-                        size: 30.0,
-                      ),
-                      onPressed: () {
-                        getImage();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Username',
-                                style: TextStyle(
-                                    color: Colors.blueGrey, fontSize: 18.0)),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('something',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      child: Icon(
-                        FontAwesomeIcons.pen,
-                        color: Color(0xff476cfb),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Birthday',
-                                style: TextStyle(
-                                    color: Colors.blueGrey, fontSize: 18.0)),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('1st April, 2000',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      child: Icon(
-                        FontAwesomeIcons.pen,
-                        color: Color(0xff476cfb),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Location',
-                                style: TextStyle(
-                                    color: Colors.blueGrey, fontSize: 18.0)),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Paris, France',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      child: Icon(
-                        FontAwesomeIcons.pen,
-                        color: Color(0xff476cfb),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Email',
-                        style:
-                            TextStyle(color: Colors.blueGrey, fontSize: 18.0)),
-                    SizedBox(width: 20.0),
-                    Text('michelle123@gmail.com',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold)),
-                  ],
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+              onTap: () async{
+                getImage();
+                await user.reload();
+                user = AuthService().getCurrentUser();
+              },
+              child: ClipOval(
+                child: CachedNetworkImage(imageUrl: user.photoUrl?? "https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png",
+                  width: 80.0,
+                  height: 80.0,
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    color: Color(0xff476cfb),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    elevation: 4.0,
-                    splashColor: Colors.blueGrey,
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
-                    ),
-                  ),
-                  RaisedButton(
-                    color: Color(0xff476cfb),
-                    onPressed: () {
-                     uploadPic(context);
-                    },
-                                     
-                    elevation: 4.0,
-                    splashColor: Colors.blueGrey,
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
-                    ),
-                  ),
-              
-                ],
               )
-            ],
           ),
         ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Name: ${user.displayName ?? 'Anonymous'}", style: TextStyle(fontSize: 20),),
         ),
-        );
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("Email: ${user.email ?? 'Anonymous'}", style: TextStyle(fontSize: 20),),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("Created: ${DateFormat('MM/dd/yyyy').format(
+              user.metadata.creationTime)}", style: TextStyle(fontSize: 20),),
+        ),
+      ],
+    );
   }
+
 }

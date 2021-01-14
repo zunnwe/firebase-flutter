@@ -8,7 +8,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Users _userValidateFromFirebase(User user) {
-      return user !=null ? Users(uid: user.uid): null;
+      return user !=null ? Users(user.uid): null;
   }
 
   Stream<Users> get user{
@@ -17,6 +17,10 @@ class AuthService {
 
   Future<String> getCurrentUID() async {
     return (await _auth.currentUser).uid;
+  }
+
+  Future getCurrentUser() async {
+    return await _auth.currentUser;
   }
 //
 //   Future signInWithEmailAndPassword(String email, String pwd) async{

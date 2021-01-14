@@ -21,29 +21,29 @@ import 'package:comics_app/utils/userData_notifier.dart';
 typedef DialogCallback = void Function();
 
 class PdfDetails extends StatelessWidget {
-  UserData pdf;
+  DocumentSnapshot pdf;
   final uid;
   PdfDetails(this.uid, this.pdf);
+  UserData pdfs;
 
   @override
   Widget build(BuildContext context) {
     DataRepository repo = new DataRepository();
     UserDataNotifier notifier = Provider.of<UserDataNotifier>(context,listen: false);
+    pdfs = UserData.fromSnapshot(pdf);
     //repo.getusersData(notifier);
-    Future<void> _refreshList() async {
-      //pdf = repo.getusersData(notifier);
-    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(pdf.fiction_name== null ? "" : pdf.fiction_name),
+          title: Text(pdfs.fiction_name== null ? "" : pdfs.fiction_name),
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
               }),
         ),
-        body: PdfDetailForm(uid, pdf),
+        body: PdfDetailForm(uid, pdfs),
       ),
     );
   }
@@ -75,62 +75,62 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
 
   final pdf = pw.Document();
   File file;
-  writeOnPdf() async{
-    pdf.addPage(
-        pw.MultiPage(
-          pageFormat: PdfPageFormat.a5,
-          margin: pw.EdgeInsets.all(32),
-
-          build: (pw.Context context) {
-            return <pw.Widget>[
-              pw.Header(
-                  level: 0,
-                  child: pw.Text("Easy Approach Document")
-              ),
-
-              pw.Paragraph(
-                  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
-              ),
-
-              pw.Paragraph(
-                  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
-              ),
-
-              pw.Header(
-                  level: 1,
-                  child: pw.Text("Second Heading")
-              ),
-
-              pw.Paragraph(
-                  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
-              ),
-
-              pw.Paragraph(
-                  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
-              ),
-
-              pw.Paragraph(
-                  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
-              ),
-            ];
-          },
-        )
-    );
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-
-    String documentPath = documentDirectory.path;
-
-    file = File("$documentPath/example.pdf");
-
-    file.writeAsBytesSync(pdf.save());
-    print("finished and saved in file...");
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child("mypdf" + DateTime.now().toString());
-    UploadTask uploadTask = ref.putFile(file);
-    pdf_url = await (await uploadTask).ref.getDownloadURL();
-    // print("hello" + pdf_url);
-
-  }
+  // writeOnPdf() async{
+  //   pdf.addPage(
+  //       pw.MultiPage(
+  //         pageFormat: PdfPageFormat.a5,
+  //         margin: pw.EdgeInsets.all(32),
+  //
+  //         build: (pw.Context context) {
+  //           return <pw.Widget>[
+  //             pw.Header(
+  //                 level: 0,
+  //                 child: pw.Text("Easy Approach Document")
+  //             ),
+  //
+  //             pw.Paragraph(
+  //                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
+  //             ),
+  //
+  //             pw.Paragraph(
+  //                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
+  //             ),
+  //
+  //             pw.Header(
+  //                 level: 1,
+  //                 child: pw.Text("Second Heading")
+  //             ),
+  //
+  //             pw.Paragraph(
+  //                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
+  //             ),
+  //
+  //             pw.Paragraph(
+  //                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
+  //             ),
+  //
+  //             pw.Paragraph(
+  //                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada fames ac turpis egestas sed tempus urna. Quisque sagittis purus sit amet. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Ipsum dolor sit amet consectetur adipiscing elit pellentesque. Viverra justo nec ultrices dui sapien eget mi proin sed."
+  //             ),
+  //           ];
+  //         },
+  //       )
+  //   );
+  //   Directory documentDirectory = await getApplicationDocumentsDirectory();
+  //
+  //   String documentPath = documentDirectory.path;
+  //
+  //   file = File("$documentPath/example.pdf");
+  //
+  //   file.writeAsBytesSync(pdf.save());
+  //   print("finished and saved in file...");
+  //   FirebaseStorage storage = FirebaseStorage.instance;
+  //   Reference ref = storage.ref().child("mypdf" + DateTime.now().toString());
+  //   UploadTask uploadTask = ref.putFile(file);
+  //   pdf_url = await (await uploadTask).ref.getDownloadURL();
+  //   // print("hello" + pdf_url);
+  //
+  // }
 
   // Future savePdf() async {
   //   print("called savePdf...");
@@ -234,18 +234,18 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                 },
               ),
             ),
-            FloatingActionButton(
-              onPressed: () async {
-                writeOnPdf();
-                //savePdf();
-                _addParts(widget.pdfs, () {
-                  setState(() {});
-                }
-                );
-              },
-              tooltip: 'Add Part',
-              child: Icon(Icons.add),
-            ),
+            // FloatingActionButton(
+            //   onPressed: () async {
+            //     writeOnPdf();
+            //     //savePdf();
+            //     _addParts(widget.pdfs, () {
+            //       setState(() {});
+            //     }
+            //     );
+            //   },
+            //   tooltip: 'Add Part',
+            //   child: Icon(Icons.add),
+            // ),
             SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
