@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:comics_app/utils/provider_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +7,7 @@ import 'dart:io';
 import 'package:comics_app/repository/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 
 class ProfileView extends StatefulWidget {
@@ -16,17 +16,19 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  Users users = Users("");
+  Users users;
   String bio;
   String displayName;
   File _image;
   String imageUrl;
   var snapshots;
+  User firebaseuser;
   TextEditingController _userbioController = TextEditingController();
   TextEditingController _userDisplayNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    users = Provider.of<Users>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit profile'),
@@ -61,7 +63,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget displayUserInformation(context, snapshot) {
     final authData = snapshot.data;
-
     return Column(
       children: <Widget>[
         StreamBuilder(
@@ -162,7 +163,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: Text("Sign Out"),
         onPressed: () async {
           try {
-            await Provider.of(context).auth.signOut();
+            await AuthService().signOut();
           } catch (e) {
             print(e);
           }

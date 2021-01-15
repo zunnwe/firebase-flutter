@@ -52,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-
     user = Provider.of<Users>(context);
     repo = new DataRepository(uid: user.id);
     //user.displayName = FirebaseAuth.instance.currentUser.displayName;
@@ -78,14 +77,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       MaterialPageRoute(builder: (context)=> ProfileView())
                       );
                     },
-                    child: CircleAvatar(
-                      radius: 20.0,
-                      backgroundColor: Colors.white,
-                      child: Image.network(
-                        (user.photoUrl == null)? 'https://www.materialui.co/materialIcons/image/add_a_photo_black_36x36.png'
-                            : user.photoUrl,
-                        fit: BoxFit.fill,
-                      ),
+                    child: Icon(
+                      Icons.account_circle,
+                      color: Colors.black,
+                      size: 50.0,
                     )
                   ),
                 ],

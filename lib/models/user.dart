@@ -14,9 +14,8 @@ class Users {
   String displayName;
   String bio;
 
-  Users(this.id, {
+  Users(this.id, this.photoUrl, {
     this.email,
-    this.photoUrl,
     this.displayName,
     this.bio
   });

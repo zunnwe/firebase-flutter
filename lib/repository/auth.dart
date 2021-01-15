@@ -8,7 +8,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Users _userValidateFromFirebase(User user) {
-      return user !=null ? Users(user.uid): null;
+      return user !=null ? Users(user.uid, user.photoURL): null;
   }
 
   Stream<Users> get user{
