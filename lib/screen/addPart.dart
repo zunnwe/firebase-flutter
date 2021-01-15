@@ -106,7 +106,7 @@ class _AddPartScreenState extends State<AddPartScreen>{
                   }
                   pdfs.parts.add(newParts);
 
-                  Firestore.instance.collection("userData").document(uid).collection("pdfs").add(pdfs.toJson());
+                  FirebaseFirestore.instance.collection("userData").document(uid).collection("pdfs").add(pdfs.toJson());
                   savetoServer(uid, title, title2, description, imageUrl, imageUrl2, story, pdfs);
                 }
                 if(_selectedChoices == Choices.delete){

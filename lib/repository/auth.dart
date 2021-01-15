@@ -19,6 +19,7 @@ class AuthService {
     return (await _auth.currentUser).uid;
   }
 
+  // GET CURRENT USER
   Future getCurrentUser() async {
     return await _auth.currentUser;
   }

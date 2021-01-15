@@ -9,30 +9,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Users {
   final String id;
-  final String username;
-  final String email;
-  final String photoUrl;
-  final String displayName;
-  final String bio;
+  String email;
+  String photoUrl;
+  String displayName;
+  String bio;
 
   Users(this.id, {
-    this.username,
     this.email,
     this.photoUrl,
     this.displayName,
-    this.bio,
+    this.bio
   });
 
-  factory Users.fromDocument(DocumentSnapshot doc) {
-    return Users(
-      doc['id'] as String,
-      email: doc['email'] as String,
-      username: doc['username'] as String,
-      photoUrl: doc['photoUrl'] as String,
-      displayName: doc['displayName'] as String,
-      bio: doc['bio'] as String,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'email': email,
+    'photoUrl': photoUrl,
+    'displayName': displayName,
+    'bio': bio
+  };
 }
 
 
