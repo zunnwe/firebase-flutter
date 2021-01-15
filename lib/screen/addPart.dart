@@ -100,7 +100,7 @@ class _AddPartScreenState extends State<AddPartScreen>{
                 _selectedChoices = result;
                 if(_selectedChoices == Choices.save){
                   pdfs = UserData(uid , fiction_name: title,id: uuid.v1(), image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now() );
-                  Parts newParts = Parts(uuid.v1(), name: title2, pdf_url: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now(), publish: false);
+                  Parts newParts = Parts(uuid.v1(), name: title2, story: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now(), publish: false);
                   if (pdfs.parts == null) {
                     pdfs.parts = List<Parts>();
                   }
@@ -222,7 +222,7 @@ class _AddPartScreenState extends State<AddPartScreen>{
 
   savetoServer(String uid, String title, String title2, String description, String imageUrl, String imageUrl2, String story, UserData pdfs) async{
     pdfs = UserData(uid , fiction_name: title,id: uuid.v1(), image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now() );
-    Parts newParts = Parts(uuid.v1(), name: title2, pdf_url: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now());
+    Parts newParts = Parts(uuid.v1(), name: title2, story: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now());
     if (pdfs.parts == null) {
       pdfs.parts = List<Parts>();
     }

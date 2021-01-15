@@ -114,8 +114,7 @@ class _ProfileViewState extends State<ProfileView> {
               color: Colors.blue,
               onPressed: () async{
                 imageUrl = await getImage();
-                print("imageUrl");
-                print(imageUrl);
+                users.photoUrl = imageUrl;
                 var uid = await FirebaseAuth.instance.currentUser.uid;
                 await Firestore.instance
                     .collection("userData")
@@ -248,7 +247,7 @@ class _ProfileViewState extends State<ProfileView> {
                             .collection("userData")
                             .document(uid)
                             .collection('data')
-                            .where("bio", isEqualTo: "bio")
+                            .where("photoUrl", isEqualTo: users.photoUrl)
                             .getDocuments()
                             .then((res) {
                           res.documents.forEach((result) {

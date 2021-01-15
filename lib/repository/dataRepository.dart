@@ -47,7 +47,19 @@ class DataRepository{
     // doc.documents.forEach((element) {
     //   id = element.id;
     // });
-      await collection.document(pdfs.reference.documentID).updateData(pdfs.toJson());
+    //   await collection.document(pdfs.reference.documentID).updateData(pdfs.toJson());
+    await Firestore.instance
+        .collection("pdfs")
+        .where("id", isEqualTo: pdfs.id)
+        .getDocuments()
+        .then((res) {
+      res.documents.forEach((result) {
+        Firestore.instance
+            .collection("pdfs")
+            .document(result.documentID)
+            .updateData({"fiction_name": pdfs.fiction_name});
+      });
+    });
   }
 
   deletePdf(UserData pdfs) async{

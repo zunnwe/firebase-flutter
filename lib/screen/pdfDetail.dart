@@ -13,10 +13,11 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:uuid/uuid.dart';
 import '../models/parts.dart';
 import '../models/pdfs.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/utils/userData_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:comics_app/screen/editStory.dart';
 
 typedef DialogCallback = void Function();
 
@@ -67,11 +68,6 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
   String image;
   String pdf_path;
   String pdf_url;
-  // @override
-  // void initState() {
-  //   type = widget.pdfs.fiction_name;
-  //   super.initState();
-  // }
 
   final pdf = pw.Document();
   File file;
@@ -173,32 +169,6 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                 setState(() => story_name = val);
               },
             ),
-            FormBuilderTextField(
-              // attribute: "name",
-              initialValue: widget.pdfs.image,
-              decoration: textInputDecoration.copyWith(
-                  hintText: 'Image', labelText: "Image"),
-              validators: [
-                FormBuilderValidators.minLength(1),
-                FormBuilderValidators.required()
-              ],
-              onChanged: (val) {
-                setState(() => image = val);
-              },
-            ),
-            FormBuilderTextField(
-              // attribute: "name",
-              initialValue: widget.pdfs.fiction_name,
-              decoration: textInputDecoration.copyWith(
-                  hintText: 'Path', labelText: "Story Path"),
-              validators: [
-                FormBuilderValidators.minLength(1),
-                FormBuilderValidators.required()
-              ],
-              onChanged: (val) {
-                setState(() => pdf_path = val);
-              },
-            ),
 
             SizedBox(height: 20.0),
 
@@ -234,18 +204,17 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                 },
               ),
             ),
-            // FloatingActionButton(
-            //   onPressed: () async {
-            //     writeOnPdf();
-            //     //savePdf();
-            //     _addParts(widget.pdfs, () {
-            //       setState(() {});
-            //     }
-            //     );
-            //   },
-            //   tooltip: 'Add Part',
-            //   child: Icon(Icons.add),
-            // ),
+            FloatingActionButton(
+              onPressed: () async {
+                //savePdf();
+                _addParts(widget.pdfs, () {
+                  setState(() {});
+                }
+                );
+              },
+              tooltip: 'Add Part',
+              child: Icon(Icons.add),
+            ),
             SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -264,14 +233,30 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         if (_formKey.currentState.validate()) {
-                          Navigator.of(context).pop();
                           widget.pdfs.fiction_name = story_name?? widget.pdfs.fiction_name;
-                          widget.pdfs.image = widget.pdfs.image?? '';
                           //widget.pdfs.pdf_path?? '';
-
-                          repository.updatePdf(widget.pdfs);
-
+                          var uid = await FirebaseAuth.instance.currentUser.uid;
+                          await Firestore.instance
+                              .collection("userData")
+                              .document(uid)
+                              .collection('pdfs')
+                              .where("id", isEqualTo: widget.pdfs.id)
+                              .getDocuments()
+                              .then((res) {
+                            res.documents.forEach((result) {
+                              Firestore.instance
+                                  .collection("userData")
+                                  .document(uid)
+                                  .collection("pdfs")
+                                  .document(result.documentID)
+                                  .updateData({"fiction_name": widget.pdfs.fiction_name});
+                            });
+                            repository.updatePdf(widget.pdfs);
+                          });
+                          // Navigator.of(context).pop();
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> EditStoryScreen()));
                         }
+
                       }
                     },
                     child: Text(
@@ -381,15 +366,31 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                     },
                     child: Text("Cancel")),
                 FlatButton(
-                    onPressed: () {
+                    onPressed: () async{
                       if (_formKey.currentState.validate()) {
                         Navigator.of(context).pop();
-                        Parts newPart = Parts(uuid.v1(), name: part_name, pdf_url: pdf_url,
+                        Parts newPart = Parts(uuid.v1(), name: part_name, story: pdf_url,
                             createdAt: created_at, updatedAt: updated_at);
                         if (pdfs.parts == null) {
                           pdfs.parts = List<Parts>();
                         }
-                        pdfs.parts.add(newPart);
+                        widget.pdfs.parts.add(newPart);
+                        var uid = await FirebaseAuth.instance.currentUser.uid;
+                        Future<QuerySnapshot> books =
+                        Firestore.instance
+                            .collection("userData").document(uid).collection("pdfs").where("id", isEqualTo: widget.pdfs.id).getDocuments();
+                        books.then((value) {
+                          value.documents.forEach((element) {
+                            Firestore.instance
+                                .collection("userData")
+                                .document(uid)
+                                .collection("pdfs")
+                                .document(element.documentID)
+                                .delete()
+                                .then((value) => print("success"));
+                          });
+                          FirebaseFirestore.instance.collection("userData").document(uid).collection("pdfs").add(widget.pdfs.toJson());
+                        });
                       }
                       callback();
                     },
