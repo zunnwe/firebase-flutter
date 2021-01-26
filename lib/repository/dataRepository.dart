@@ -42,29 +42,56 @@ class DataRepository{
 
 
   updatePdf(UserData pdfs) async {
-    // String id;
-    // var doc = await collection.getDocuments();
-    // doc.documents.forEach((element) {
-    //   id = element.id;
-    // });
-    //   await collection.document(pdfs.reference.documentID).updateData(pdfs.toJson());
-    await Firestore.instance
-        .collection("pdfs")
-        .where("id", isEqualTo: pdfs.id)
-        .getDocuments()
-        .then((res) {
-      res.documents.forEach((result) {
+
+    Future<QuerySnapshot> books =
+    Firestore.instance
+        .collection("pdfs").where("id", isEqualTo: pdfs.id).getDocuments();
+    books.then((value) {
+      value.documents.forEach((element) {
         Firestore.instance
             .collection("pdfs")
-            .document(result.documentID)
-            .updateData({"fiction_name": pdfs.fiction_name});
+            .document(element.documentID)
+            .delete()
+            .then((value) => print("success"));
       });
+
+    });
+  }
+
+  updatePdfByUser(UserData pdfs) async {
+
+    Future<QuerySnapshot> books =
+    Firestore.instance
+        .collection("userData")
+        .document(uid)
+        .collection("pdfs").where("id", isEqualTo: pdfs.id).getDocuments();
+    books.then((value) {
+      value.documents.forEach((element) {
+        Firestore.instance
+            .collection("userData")
+            .document(uid)
+            .collection("pdfs")
+            .document(element.documentID)
+            .delete()
+            .then((value) => print("success"));
+      });
+
     });
   }
 
   deletePdf(UserData pdfs) async{
-    await collection.document(pdfs.reference.documentID).delete();
-
+    Future<QuerySnapshot> books =
+    Firestore.instance
+        .collection("pdfs").where("id", isEqualTo: pdfs.id).getDocuments();
+    books.then((value) {
+      value.documents.forEach((element) {
+        Firestore.instance
+            .collection("pdfs")
+            .document(element.documentID)
+            .delete()
+            .then((value) => print("success"));
+      });
+    });
   }
 
   deletePart(int index, List parts){
@@ -80,10 +107,7 @@ class DataRepository{
     }
   }
 
-// updatePart(UserData userData, List<Parts> parts) async{
-  //   await collection.document(userData.reference.documentID).update({'parts': parts});
-  //
-  // }
+
 
 
 }

@@ -8,6 +8,7 @@ import 'package:comics_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:comics_app/utils/userData_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PartListScreen extends StatefulWidget{
 
@@ -72,30 +73,24 @@ class _PartListState extends State<PartListScreen>{
                         style: TextStyle(fontSize: 20)
                     ),
                     RaisedButton(
-                      onPressed: () {
-                        //print(part);
+                      onPressed: () async{
+                        var uid = await FirebaseAuth.instance.currentUser.uid;
+                        partList = repo.deletePart(index, part);
+                        print("partList");
+                        print(partList);
+                        repo.updatePdfByUser(pdfs);
+                        partList.forEach((element) {
+                          print('part added');
+                          pdfs.parts.add(element);
+                          pdfs.parts.removeAt(index);
+                          partList.remove(element);
+                        });
+                        FirebaseFirestore.instance.collection("userData")
+                            .document(uid).collection("pdfs").add(pdfs.toJson());
+
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context)=> PdfListScreen())
                         );
-                        setState(() {
-                          partList = repo.deletePart(index, part);
-                          print("partList");
-                          print(partList);
-                          //part = partList;
-                          repo.updatePdf(pdfs);
-                          partList.forEach((element) {
-                            print('part added');
-                            pdfs.parts.add(element);
-                            pdfs.parts.removeAt(index);
-                            partList.remove(element);
-                          });
-                        });
-                        //print("done");
-                        //repo.updatePdf(pdfs);
-                        // pdfs.parts.removeWhere((item) => item.part_id == part[index].part_id);
-                        // print('pdfs');
-                        // print(pdfs);
-                        // datarepo.updatePart(pdfs, partList);
                       },
                       child: Text('delete'),
                     )

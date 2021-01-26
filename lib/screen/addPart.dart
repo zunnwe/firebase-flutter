@@ -41,7 +41,7 @@ class _AddPartScreenState extends State<AddPartScreen>{
   Parts newPart;
   var uuid = new Uuid();
   var docId;
-
+  var pid;
   TextEditingController _textEditingController = TextEditingController();
   TextEditingController _textEditingController2 = TextEditingController();
   String uid;
@@ -98,8 +98,9 @@ class _AddPartScreenState extends State<AddPartScreen>{
             onSelected: (Choices result) {
               setState((){
                 _selectedChoices = result;
+                pid = uuid.v1();
                 if(_selectedChoices == Choices.save){
-                  pdfs = UserData(uid , fiction_name: title,id: uuid.v1(), image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now() );
+                  pdfs = UserData(uid , fiction_name: title,id: pid, image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now() );
                   Parts newParts = Parts(uuid.v1(), name: title2, story: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now(), publish: false);
                   if (pdfs.parts == null) {
                     pdfs.parts = List<Parts>();
@@ -107,7 +108,7 @@ class _AddPartScreenState extends State<AddPartScreen>{
                   pdfs.parts.add(newParts);
 
                   FirebaseFirestore.instance.collection("userData").document(uid).collection("pdfs").add(pdfs.toJson());
-                  savetoServer(uid, title, title2, description, imageUrl, imageUrl2, story, pdfs);
+                  savetoServer(uid, title, title2, description, imageUrl, imageUrl2, story, pdfs, pid);
                 }
                 if(_selectedChoices == Choices.delete){
                   repository.deletePdf(pdfs);
@@ -220,8 +221,8 @@ class _AddPartScreenState extends State<AddPartScreen>{
     );
   }
 
-  savetoServer(String uid, String title, String title2, String description, String imageUrl, String imageUrl2, String story, UserData pdfs) async{
-    pdfs = UserData(uid , fiction_name: title,id: uuid.v1(), image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now() );
+  savetoServer(String uid, String title, String title2, String description, String imageUrl, String imageUrl2, String story, UserData pdfs, String pid) async{
+    pdfs = UserData(uid , fiction_name: title,id: pid, image: imageUrl, description: description, createdAt: Timestamp.now(), updatedAt: Timestamp.now());
     Parts newParts = Parts(uuid.v1(), name: title2, story: story, part_image_url: imageUrl2, createdAt: Timestamp.now(), updatedAt: Timestamp.now());
     if (pdfs.parts == null) {
       pdfs.parts = List<Parts>();

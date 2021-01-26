@@ -235,6 +235,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                         if (_formKey.currentState.validate()) {
                           widget.pdfs.fiction_name = story_name?? widget.pdfs.fiction_name;
                           //widget.pdfs.pdf_path?? '';
+                          repository.updatePdf(widget.pdfs);
                           var uid = await FirebaseAuth.instance.currentUser.uid;
                           await Firestore.instance
                               .collection("userData")
@@ -251,7 +252,7 @@ class _PdfDetailFormState extends State<PdfDetailForm> {
                                   .document(result.documentID)
                                   .updateData({"fiction_name": widget.pdfs.fiction_name});
                             });
-                            repository.updatePdf(widget.pdfs);
+
                           });
                           // Navigator.of(context).pop();
                           Navigator.push(context, MaterialPageRoute(builder: (context)=> EditStoryScreen()));

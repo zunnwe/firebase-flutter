@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comics_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:comics_app/screen/pdfListScreen.dart';
 
 class EditStoryScreen extends StatefulWidget{
 
@@ -75,7 +76,31 @@ class _editStoryScreenState extends State<EditStoryScreen>{
                             width: 50.0,
                             height: 50.0,
                           ),
-                        ))
+                        )),
+                        FlatButton(
+                          onPressed: (){
+                            UserData pdf = UserData.fromSnapshot(pdfs);
+                            repository.deletePdf(pdf);
+                            Future<QuerySnapshot> books =
+                            Firestore.instance
+                                .collection("userData")
+                                .document(uid).collection("pdfs").where("id", isEqualTo: pdf.id).getDocuments();
+                            books.then((value) {
+                              value.documents.forEach((element) {
+                                Firestore.instance
+                                    .collection("userData")
+                                    .document(uid)
+                                    .collection("pdfs")
+                                    .document(element.documentID)
+                                    .delete()
+                                    .then((value) => print("success"));
+                              });
+                            });
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> PdfListScreen()));
+                          },
+                          child: Text('delete'),
+                          color: Colors.lightBlue,
+                        )
                       ]
                   ),
                 ),
